@@ -23,10 +23,20 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            Analiza el issue #${{ github.event.issue.number }} de este repositorio (Tetris en JS vanilla).
-            Resume el problema o solicitud, evalúa si esta claro y accionable, senala informacion faltante si aplica,
-            y sugiere una prioridad (alta/media/baja) y posibles archivos afectados (index.html, style.css, game.js).
-            Publica tu analisis como comentario en el issue. No modifiques codigo ni ejecutes comandos de build/test.
+            Analiza este issue del repositorio (Tetris en JS vanilla, sin build/test tooling):
+
+            Issue #${{ github.event.issue.number }}: ${{ github.event.issue.title }}
+
+            ${{ github.event.issue.body }}
+
+            Resume el problema o solicitud, evalua si esta claro y accionable, senala informacion
+            faltante si aplica, y sugiere una prioridad (alta/media/baja) y posibles archivos
+            afectados (index.html, style.css, game.js).
+
+            Publica tu analisis como UN comentario en el issue usando la herramienta
+            mcp__github__add_issue_comment, formateado en GitHub Markdown: usa un encabezado
+            "## Analisis", una lista con vinetas para los puntos, y **negritas** para la
+            prioridad y los archivos afectados. No modifiques codigo ni ejecutes comandos de
+            build/test.
           claude_args: |
-            --allowedTools "mcp__github__add_issue_comment"
             --disallowedTools "Bash,Edit,Write,NotebookEdit"
