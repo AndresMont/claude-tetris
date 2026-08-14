@@ -44,6 +44,12 @@ body[data-theme="light"] {
   --ghost-highlight: rgba(0, 0, 0, 0.12);
 }
 
+body[data-skin="neon"] {
+  --bg-board: #050507;
+  --border-color: #1a3d3a;
+  --grid-line: #0d1a1c;
+}
+
 body {
   background: var(--bg-body);
   color: var(--text-color);
@@ -69,6 +75,20 @@ body {
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.skin-select {
+  position: absolute;
+  top: 0;
+  right: 46px;
+  background: var(--kbd-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
   line-height: 1;
   cursor: pointer;
   color: var(--text-color);
