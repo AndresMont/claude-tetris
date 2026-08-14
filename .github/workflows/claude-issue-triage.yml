@@ -23,6 +23,7 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          show_full_output: true
           prompt: |
             Analiza este issue del repositorio (Tetris en JS vanilla, sin build/test tooling):
 
@@ -34,20 +35,9 @@ jobs:
             faltante si aplica, y sugiere una prioridad (alta/media/baja) y posibles archivos
             afectados (index.html, style.css, game.js).
 
-            No modifiques codigo, no ejecutes comandos de build/test, no llames herramientas de
-            GitHub. Devuelve unicamente el JSON pedido por el schema, con el analisis completo en
-            GitHub Markdown dentro de "comment_markdown": usa un encabezado "## Analisis", una
-            lista con vinetas para los puntos, y **negritas** para la prioridad y los archivos
-            afectados.
+            Publica tu analisis como UN comentario en el issue #${{ github.event.issue.number }}
+            usando la herramienta mcp__github__add_issue_comment, formateado en GitHub Markdown:
+            encabezado "## Analisis", lista con vinetas, y **negritas** para prioridad y archivos
+            afectados. No modifiques codigo ni ejecutes comandos de build/test.
           claude_args: |
             --disallowedTools "Bash,Edit,Write,NotebookEdit"
-            --json-schema {"type":"object","properties":{"comment_markdown":{"type":"string"}},"required":["comment_markdown"]}
-
-      - name: Post analysis as issue comment
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          STRUCTURED_OUTPUT: ${{ steps.analyze.outputs.structured_output }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          echo "$STRUCTURED_OUTPUT" | jq -r '.comment_markdown' > comment_body.md
-          gh issue comment "$ISSUE_NUMBER" --body-file comment_body.md
