@@ -40,8 +40,18 @@ const overlayTitle = document.getElementById('overlay-title');
 const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
+const boxGameover = document.getElementById('box-gameover');
+const boxPause = document.getElementById('box-pause');
+const boxControls = document.getElementById('box-controls');
+const resumeBtn = document.getElementById('resume-btn');
+const restartPauseBtn = document.getElementById('restart-pause-btn');
+const showControlsBtn = document.getElementById('show-controls-btn');
+const backToPauseBtn = document.getElementById('back-to-pause-btn');
+const startLevelSelect = document.getElementById('start-level-select');
 
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
+let startLevel = 1;
+let pauseView = 'pause'; // 'pause' | 'controls', only relevant while paused
 
 function createBoard() {
   return Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
@@ -220,25 +230,50 @@ function drawNext() {
       drawBlock(nextCtx, offX + c, offY + r, shape[r][c], NB);
 }
 
+function showOverlayBox(which) {
+  boxGameover.classList.toggle('hidden', which !== 'gameover');
+  boxPause.classList.toggle('hidden', which !== 'pause');
+  boxControls.classList.toggle('hidden', which !== 'controls');
+  overlay.classList.remove('hidden');
+}
+
+function hideOverlay() {
+  overlay.classList.add('hidden');
+}
+
 function endGame() {
   gameOver = true;
   cancelAnimationFrame(animId);
   overlayTitle.textContent = 'GAME OVER';
   overlayScore.textContent = `Puntuación: ${score.toLocaleString()}`;
-  overlay.classList.remove('hidden');
+  showOverlayBox('gameover');
+}
+
+function openPauseMenu() {
+  if (gameOver) return;
+  paused = true;
+  pauseView = 'pause';
+  cancelAnimationFrame(animId);
+  showOverlayBox('pause');
+}
+
+function resumeGame() {
+  if (gameOver) return;
+  paused = false;
+  hideOverlay();
+  lastTime = performance.now();
+  animId = requestAnimationFrame(loop);
 }
 
 function togglePause() {
   if (gameOver) return;
-  paused = !paused;
   if (!paused) {
-    lastTime = performance.now();
-    loop(lastTime);
+    openPauseMenu();
+  } else if (pauseView === 'controls') {
+    pauseView = 'pause';
+    showOverlayBox('pause');
   } else {
-    cancelAnimationFrame(animId);
-    overlayTitle.textContent = 'PAUSA';
-    overlayScore.textContent = '';
-    overlay.classList.remove('hidden');
+    resumeGame();
   }
 }
 
@@ -262,22 +297,22 @@ function init() {
   board = createBoard();
   score = 0;
   lines = 0;
-  level = 1;
+  level = startLevel;
   paused = false;
   gameOver = false;
-  dropInterval = 1000;
+  dropInterval = Math.max(100, 1000 - (level - 1) * 90);
   dropAccum = 0;
   lastTime = performance.now();
   next = randomPiece();
   spawn();
   updateHUD();
-  overlay.classList.add('hidden');
+  hideOverlay();
   cancelAnimationFrame(animId);
   animId = requestAnimationFrame(loop);
 }
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'KeyP') { togglePause(); return; }
+  if (e.code === 'KeyP' || e.code === 'Escape') { e.preventDefault(); togglePause(); return; }
   if (paused || gameOver) return;
   switch (e.code) {
     case 'ArrowLeft':
@@ -302,6 +337,17 @@ document.addEventListener('keydown', e => {
 });
 
 restartBtn.addEventListener('click', init);
+restartPauseBtn.addEventListener('click', init);
+resumeBtn.addEventListener('click', resumeGame);
+showControlsBtn.addEventListener('click', () => { pauseView = 'controls'; showOverlayBox('controls'); });
+backToPauseBtn.addEventListener('click', () => { pauseView = 'pause'; showOverlayBox('pause'); });
+startLevelSelect.addEventListener('change', () => {
+  startLevel = parseInt(startLevelSelect.value, 10);
+  localStorage.setItem('startLevel', startLevel);
+});
+
+startLevel = parseInt(localStorage.getItem('startLevel'), 10) || 1;
+startLevelSelect.value = String(startLevel);
 
 function applyTheme(theme) {
   document.body.dataset.theme = theme;
