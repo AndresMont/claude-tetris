@@ -114,6 +114,23 @@ body {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }
 
+body[data-skin="neon"] #board,
+body[data-skin="neon"] #next-canvas {
+  background: #000;
+  border-color: #0ff3;
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.35), 0 0 60px rgba(224, 64, 251, 0.15);
+}
+
+body[data-skin="pastel"] #board,
+body[data-skin="pastel"] #next-canvas {
+  background: #fdf6f0;
+  border-radius: 12px;
+}
+
+body[data-skin="pastel"][data-theme] #board {
+  border-color: #e6d6e8;
+}
+
 /* ---- Panel lateral ---- */
 .panel {
   width: 160px;
@@ -149,6 +166,15 @@ body {
   border: 1px solid var(--border-color);
   background: var(--bg-board);
   border-radius: 4px;
+}
+
+#skin-select {
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  color: var(--kbd-text);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 13px;
 }
 
 /* ---- Controles ---- */
