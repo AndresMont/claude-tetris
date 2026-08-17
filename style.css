@@ -231,3 +231,136 @@ kbd {
 #restart-btn:hover {
   background: var(--restart-hover);
 }
+
+.overlay-heading {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--overlay-title-color);
+}
+
+.secondary-btn {
+  margin-top: 4px;
+  background: transparent;
+  color: var(--controls-text);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.secondary-btn:hover {
+  background: var(--kbd-bg);
+  color: var(--text-color);
+}
+
+.new-record-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--controls-text);
+}
+
+.new-record-form input {
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  color: var(--text-color);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  text-align: center;
+  width: 160px;
+}
+
+.new-record-form button {
+  background: var(--restart-bg);
+  color: var(--restart-text);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-record-form button:hover {
+  background: var(--restart-hover);
+}
+
+.records-panel {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.records-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+}
+
+.records-list li {
+  display: flex;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: var(--text-color);
+}
+
+.records-list li.empty {
+  color: var(--controls-text);
+  font-family: inherit;
+  justify-content: center;
+}
+
+.records-list li.highlight {
+  background: var(--value-color);
+  color: var(--restart-text);
+  font-weight: 700;
+}
+
+.records-list .rank {
+  width: 18px;
+  color: var(--label-color);
+}
+
+.records-list li.highlight .rank {
+  color: inherit;
+}
+
+.records-list .rname {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.records-list .rscore {
+  color: var(--value-color);
+}
+
+.records-list li.highlight .rscore {
+  color: inherit;
+}
+
+.records-extra {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--controls-text);
+}
+
+#start-screen .overlay-box {
+  max-width: 260px;
+}
